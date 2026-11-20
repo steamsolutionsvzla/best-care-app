@@ -1,12 +1,8 @@
 /*
- * App Global CSS
+ * App Global CSS — Best Care
  * ----------------------------------------------------------------------------
- * Put style rules here that you want to apply globally. These styles are for
- * the entire app and not just one component. Additionally, this file can be
- * used as an entry point to import other CSS/Sass files to be included in the
- * output CSS.
- * For more information on global stylesheets, visit the documentation:
- * https://ionicframework.com/docs/layout/global-stylesheets
+ * Base Ionic + sistema de diseño adaptado de la plantilla Ion Medical
+ * (paleta clara, tipografía ClanPro, tarjetas con sombra suave).
  */
 
 /* Core CSS required for Ionic components to work properly */
@@ -25,13 +21,123 @@
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
-/**
- * Ionic Dark Mode
- * -----------------------------------------------------
- * For more info, please see:
- * https://ionicframework.com/docs/theming/dark-mode
- */
+/* Tema siempre claro: no se importa dark.always.css */
 
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+/*
+ * Tipografía base — ClanPro (plantilla Ion Medical)
+ * ----------------------------------------------------------------------------
+ */
+body {
+  font-family: var(--bc-font-medium), -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+h1, h2, h3, .bc-heading {
+  font-family: var(--bc-font-medium), -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/*
+ * Utilidades de layout (tomadas de la plantilla)
+ * ----------------------------------------------------------------------------
+ */
+.flex { display: flex; }
+.flexd { flex-direction: column; }
+.jc-between { justify-content: space-between; }
+.jc-center { justify-content: center; }
+.jc-end { justify-content: flex-end; }
+.al-center { align-items: center; }
+.al-end { align-items: flex-end; }
+.al-start { align-items: flex-start; }
+
+.ripple-parent {
+  position: relative;
+  overflow: hidden;
+}
+
+/*
+ * Estilos globales Best Care
+ * ----------------------------------------------------------------------------
+ */
+ion-content {
+  --background: var(--ion-background-color);
+}
+
+ion-header ion-toolbar {
+  --background: var(--ion-toolbar-background);
+  --color: var(--ion-text-color);
+}
+
+ion-header.ion-no-border ion-toolbar {
+  --border-width: 0;
+}
+
+ion-tab-bar {
+  --background: var(--ion-tab-bar-background);
+  border-top: 1px solid var(--ion-border-color);
+}
+
+/* Botones con sombra de color, estilo "shadow-btn" de la plantilla */
+ion-button {
+  --border-radius: var(--bc-radius-md);
+  --box-shadow: none;
+  text-transform: none;
+  font-weight: 600;
+  font-family: var(--bc-font-medium), sans-serif;
+}
+
+ion-button[fill="solid"],
+ion-button:not([fill]) {
+  --box-shadow: var(--bc-shadow-btn);
+}
+
+.bc-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ion-color-primary);
+  font-family: var(--bc-font-medium), sans-serif;
+}
+
+.bc-card {
+  background: var(--bc-surface-1);
+  border-radius: var(--bc-radius-lg);
+  padding: 16px;
+  box-shadow: var(--bc-shadow-card);
+}
+
+.bc-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--bc-font-medium), sans-serif;
+}
+
+.bc-pill--success {
+  background: rgba(45, 211, 111, 0.12);
+  color: var(--ion-color-success);
+}
+
+.bc-pill--danger {
+  background: rgba(235, 68, 90, 0.1);
+  color: var(--ion-color-danger);
+}
+
+/* Icono redondo con gradiente, patrón recurrente de la plantilla */
+.bc-icon-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  flex-shrink: 0;
+
+  ion-icon { color: #fff; }
+
+  &.danger { background: linear-gradient(135deg, #ff7a70 0%, #eb445a 100%); }
+  &.success { background: linear-gradient(135deg, #4fe08f 0%, #2dd36f 100%); }
+  &.primary { background: var(--bc-gradient-primary); }
+  &.warning { background: linear-gradient(135deg, #ffd75e 0%, #ffc409 100%); }
+}

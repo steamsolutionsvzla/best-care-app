@@ -1,0 +1,137 @@
+<!-- src/app/centros/centros.page.html -->
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Centros de Salud</ion-title>
+    <button
+      class="location-pill"
+      [class.location-pill--loading]="cargandoUbicacion()"
+      (click)="actualizarUbicacion()"
+      slot="end"
+    >
+      <ion-icon [name]="cargandoUbicacion() ? 'sync-outline' : 'location-sharp'"></ion-icon>
+      {{ cargandoUbicacion() ? 'Ubicando…' : 'CDMX' }}
+    </button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-searchbar
+    placeholder="Buscar centros..."
+    (ionInput)="onSearch($event)"
+    class="bc-searchbar"
+    [showClearButton]="'focus'"
+  ></ion-searchbar>
+
+  <!-- ===== Banner de emergencias ===== -->
+  <div class="emergency-banner">
+    <div class="emergency-icon">
+      <ion-icon name="alert-outline"></ion-icon>
+    </div>
+    <div class="emergency-text">
+      <strong>Emergencias: 911</strong>
+      <span>Cruz Roja · IMSS: 800 623...</span>
+    </div>
+    <ion-button size="small" color="danger" (click)="callEmergency()">
+      <ion-icon name="call-outline" slot="start"></ion-icon>
+      Llamar
+    </ion-button>
+  </div>
+
+  <!-- ===== Mapa simulado con ruta hacia los centros cercanos ===== -->
+  <div class="map-card">
+    <div class="map-surface">
+      <div class="map-terrain"></div>
+      <div class="map-block map-block--1"></div>
+      <div class="map-block map-block--2"></div>
+      <div class="map-block map-block--3"></div>
+
+      <svg
+        class="map-route"
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+        *ngIf="mapRoutePoints() as pts"
+      >
+        <polyline [attr.points]="pts" class="map-route__line"></polyline>
+      </svg>
+
+      <ng-container *ngIf="ubicacion(); else mapaCargando">
+        <span class="map-pin map-pin--you" [style.top.%]="50" [style.left.%]="50">
+          <span class="map-pin__pulse"></span>
+        </span>
+
+        <span
+          class="map-pin"
+          *ngFor="let d of mapDots(); let i = index"
+          [ngClass]="i === 0 ? 'map-pin--near' : (d.isOpenNow ? 'map-pin--primary' : 'map-pin--muted')"
+          [style.top.%]="d.top"
+          [style.left.%]="d.left"
+        ></span>
+      </ng-container>
+
+      <ng-template #mapaCargando>
+        <div class="map-loading">
+          <ion-spinner name="crescent"></ion-spinner>
+          <span>Obteniendo tu ubicación…</span>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- Chip flotante con el centro más cercano -->
+    <div class="map-chip" *ngIf="featured() as f">
+      <div class="map-chip__icon" [ngClass]="f.type">
+        <ion-icon [name]="iconFor(f)"></ion-icon>
+      </div>
+      <div class="map-chip__body">
+        <span>Más cercano</span>
+        <strong>{{ f.name }} · {{ f.distanceKm }} km</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Panel de centros cercanos (Nombre, Distancia, Horario) ===== -->
+  <div class="nearby-sheet">
+    <div class="nearby-sheet__handle"></div>
+    <div class="bc-eyebrow section-label">Centros cercanos</div>
+
+    <div class="center-list">
+      <ng-container *ngIf="ubicacion(); else listaCargando">
+        <div class="center-item" *ngFor="let c of filtered(); let i = index" [class.center-item--near]="i === 0">
+          <div class="center-item__icon" [ngClass]="c.type">
+            <ion-icon [name]="iconFor(c)"></ion-icon>
+          </div>
+          <div class="center-item__body">
+            <strong>{{ c.name }}</strong>
+            <span class="center-item__meta">
+              <ion-icon name="location-sharp"></ion-icon>
+              {{ c.distanceKm }} km
+              <span class="dot-sep">·</span>
+              <ion-icon name="time-outline"></ion-icon>
+              {{ c.hours || (c.isOpenNow ? 'Abierto ahora' : 'Cerrado ahora') }}
+            </span>
+          </div>
+          <span class="bc-pill" [ngClass]="c.isOpenNow ? 'bc-pill--success' : 'bc-pill--danger'">
+            {{ c.isOpenNow ? 'Abierto' : 'Cerrado' }}
+          </span>
+        </div>
+
+        <div class="empty-state" *ngIf="filtered().length === 0">
+          No se encontraron centros con ese nombre.
+        </div>
+      </ng-container>
+
+      <ng-template #listaCargando>
+        <div class="center-item center-item--skeleton" *ngFor="let i of [1, 2, 3]">
+          <div class="center-item__icon">
+            <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+          </div>
+          <div class="center-item__body">
+            <ion-skeleton-text [animated]="true" style="width: 70%"></ion-skeleton-text>
+            <ion-skeleton-text [animated]="true" style="width: 45%"></ion-skeleton-text>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+</ion-content>

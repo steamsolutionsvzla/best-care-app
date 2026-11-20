@@ -1,0 +1,139 @@
+<!-- src/app/perfil/editar-perfil/editar-perfil.page.html -->
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Editar mis datos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="editar-perfil-content" [fullscreen]="true">
+
+  <!-- ===== Foto de perfil ===== -->
+  <div class="avatar-picker">
+    <label class="avatar-picker__ring" for="avatar-input">
+      <img *ngIf="avatarUrl; else fallbackAvatar" [src]="avatarUrl" alt="avatar" />
+      <ng-template #fallbackAvatar>
+        <ion-icon name="person-outline"></ion-icon>
+      </ng-template>
+      <span class="avatar-picker__badge">
+        <ion-icon name="camera-outline"></ion-icon>
+      </span>
+    </label>
+    <input id="avatar-input" type="file" accept="image/*" hidden (change)="onAvatarSelected($event)" />
+    <p class="avatar-picker__hint">Toca la foto para cambiarla</p>
+  </div>
+
+  <!-- ===== Datos personales ===== -->
+  <span class="editar-perfil-eyebrow">Datos personales</span>
+  <div class="editar-perfil-card">
+    <ion-item class="bc-input" lines="none">
+      <ion-icon name="person-outline" slot="start"></ion-icon>
+      <ion-input label="Nombre" labelPlacement="floating" type="text" [(ngModel)]="firstName"></ion-input>
+    </ion-item>
+
+    <ion-item class="bc-input" lines="none">
+      <ion-icon name="person-outline" slot="start"></ion-icon>
+      <ion-input label="Apellido" labelPlacement="floating" type="text" [(ngModel)]="lastName"></ion-input>
+    </ion-item>
+
+    <ion-item class="bc-input" lines="none">
+      <ion-icon name="mail-outline" slot="start"></ion-icon>
+      <ion-input label="Correo electrónico" labelPlacement="floating" type="email" autocomplete="email"
+        inputmode="email" [(ngModel)]="email"></ion-input>
+    </ion-item>
+
+    <ion-item class="bc-input" lines="none">
+      <ion-icon name="call-outline" slot="start"></ion-icon>
+      <ion-input label="Teléfono" labelPlacement="floating" type="tel" [(ngModel)]="phone"></ion-input>
+    </ion-item>
+
+    <ion-item class="bc-input" lines="none">
+      <ion-icon name="calendar-outline" slot="start"></ion-icon>
+      <ion-input label="Fecha de nacimiento" labelPlacement="floating" type="date" [(ngModel)]="birthDate"></ion-input>
+    </ion-item>
+
+    <ion-item class="bc-input" lines="none">
+      <ion-icon name="male-female-outline" slot="start"></ion-icon>
+      <ion-select label="Género" labelPlacement="floating" interface="popover" [interfaceOptions]="selectPopoverOptions"
+        [(ngModel)]="gender">
+        <ion-select-option value="M">Masculino</ion-select-option>
+        <ion-select-option value="F">Femenino</ion-select-option>
+        <ion-select-option value="Other">Otro</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item class="bc-input" lines="none">
+      <ion-icon name="id-card-outline" slot="start"></ion-icon>
+      <ion-select label="Tipo de documento" labelPlacement="floating" interface="popover"
+        [interfaceOptions]="selectPopoverOptions" [(ngModel)]="documentType">
+        <ion-select-option value="V">V (Venezolano)</ion-select-option>
+        <ion-select-option value="E">E (Extranjero)</ion-select-option>
+        <ion-select-option value="P">P (Pasaporte)</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item class="bc-input" lines="none">
+      <ion-icon name="id-card-outline" slot="start"></ion-icon>
+      <ion-input label="Número de documento" labelPlacement="floating" type="text" [(ngModel)]="documentId"></ion-input>
+    </ion-item>
+  </div>
+
+  <!-- ===== Datos médicos ===== -->
+  <span class="editar-perfil-eyebrow">Datos médicos</span>
+  <div class="editar-perfil-card">
+    <ion-item class="bc-input" lines="none">
+      <ion-icon name="water-outline" slot="start"></ion-icon>
+      <ion-select label="Tipo de sangre" labelPlacement="floating" interface="popover"
+        [interfaceOptions]="selectPopoverOptions" [(ngModel)]="bloodType">
+        <ion-select-option *ngFor="let bt of bloodTypes" [value]="bt">{{ bt }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item class="bc-input" lines="none">
+      <ion-icon name="barbell-outline" slot="start"></ion-icon>
+      <ion-input label="Peso (Kg)" labelPlacement="floating" type="text" inputmode="decimal" placeholder="70"
+        [(ngModel)]="weight"></ion-input>
+    </ion-item>
+
+    <ion-item class="bc-input" lines="none">
+      <ion-icon name="swap-vertical-outline" slot="start"></ion-icon>
+      <ion-input label="Altura (Metros)" labelPlacement="floating" type="text" inputmode="decimal" placeholder="1.75"
+        [(ngModel)]="height"></ion-input>
+    </ion-item>
+
+    <ion-item class="bc-input" lines="none">
+      <ion-icon name="heart-outline" slot="start"></ion-icon>
+      <ion-toggle justify="space-between" [(ngModel)]="isOrganDonor">Donante de órganos</ion-toggle>
+    </ion-item>
+  </div>
+
+  <!-- ===== Seguridad ===== -->
+  <span class="editar-perfil-eyebrow">Seguridad</span>
+  <div class="editar-perfil-card">
+    <ion-item class="bc-input" lines="none">
+      <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+      <ion-input label="Nueva contraseña (opcional)" labelPlacement="floating" type="password"
+        autocomplete="new-password" [(ngModel)]="newPassword"></ion-input>
+    </ion-item>
+
+    <ion-item class="bc-input" lines="none">
+      <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+      <ion-input label="Confirmar contraseña" labelPlacement="floating" type="password" autocomplete="new-password"
+        [(ngModel)]="confirmPassword"></ion-input>
+    </ion-item>
+  </div>
+
+  <ion-text color="danger" *ngIf="errorMessage()">
+    <p class="error-text">{{ errorMessage() }}</p>
+  </ion-text>
+
+  <ion-button expand="block" class="shadow-btn" [disabled]="submitting()" (click)="onSave()">
+    <ion-spinner *ngIf="submitting()" name="crescent"></ion-spinner>
+    <span *ngIf="!submitting()">Guardar cambios</span>
+  </ion-button>
+
+</ion-content>

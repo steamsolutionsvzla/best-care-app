@@ -3,7 +3,12 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  // Bigback (API REST v2 + FHIR) - Best Care
+  // TODO: si el equipo backend habilita un ambiente de staging/QA,
+  // apuntar aquí a esa URL en lugar de producción.
+  apiUrl: 'https://bigback.bestclinic.io/api/v2',
+  fhirUrl: 'https://bigback.bestclinic.io/fhir',
 };
 
 /*

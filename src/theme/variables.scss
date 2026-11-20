@@ -1,2 +1,133 @@
-// For information on how to create your own theme, please refer to:
-// https://ionicframework.com/docs/theming/
+// src/theme/variables.scss
+// Paleta clara estilo "Ion Medical" adaptada a Best Care
+
+:root {
+  /* ---- Color primario (azul plantilla Ion Medical) ---- */
+  --ion-color-primary: #2D8FFF;
+  --ion-color-primary-rgb: 45, 143, 255;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #287ee0;
+  --ion-color-primary-tint: #429aff;
+
+  /* ---- Success (verde: activo / abierto) ---- */
+  --ion-color-success: #2dd36f;
+  --ion-color-success-rgb: 45, 211, 111;
+  --ion-color-success-contrast: #ffffff;
+  --ion-color-success-contrast-rgb: 255, 255, 255;
+  --ion-color-success-shade: #28ba62;
+  --ion-color-success-tint: #42d77d;
+
+  /* ---- Warning (amarillo: alergias) ---- */
+  --ion-color-warning: #ffc409;
+  --ion-color-warning-rgb: 255, 196, 9;
+  --ion-color-warning-contrast: #000000;
+  --ion-color-warning-contrast-rgb: 0, 0, 0;
+  --ion-color-warning-shade: #e0ac08;
+  --ion-color-warning-tint: #ffca22;
+
+  /* ---- Danger (rojo: alertas / emergencias) ---- */
+  --ion-color-danger: #eb445a;
+  --ion-color-danger-rgb: 235, 68, 90;
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-contrast-rgb: 255, 255, 255;
+  --ion-color-danger-shade: #cf3c4f;
+  --ion-color-danger-tint: #ed576b;
+
+  /* ---- Tertiary (violeta: contactos de emergencia) ---- */
+  --ion-color-tertiary: #7c5cfc;
+  --ion-color-tertiary-rgb: 124, 92, 252;
+  --ion-color-tertiary-contrast: #ffffff;
+  --ion-color-tertiary-contrast-rgb: 255, 255, 255;
+  --ion-color-tertiary-shade: #6d51de;
+  --ion-color-tertiary-tint: #896cfc;
+
+  /* ---- Medium / Light auxiliares ---- */
+  --ion-color-medium: #8b93a7;
+  --ion-color-medium-rgb: 139, 147, 167;
+  --ion-color-medium-contrast: #ffffff;
+  --ion-color-medium-contrast-rgb: 255, 255, 255;
+  --ion-color-medium-shade: #7a8193;
+  --ion-color-medium-tint: #969db0;
+
+  --ion-color-light: #f4f7fc;
+  --ion-color-light-rgb: 244, 247, 252;
+  --ion-color-light-contrast: #000000;
+  --ion-color-light-contrast-rgb: 0, 0, 0;
+  --ion-color-light-shade: #d7dade;
+  --ion-color-light-tint: #f5f8fc;
+
+  /* ---- Fondo y superficies (modo claro) ---- */
+  --ion-background-color: #f4f7fc;
+  --ion-background-color-rgb: 244, 247, 252;
+  --ion-text-color: #1a1d29;
+  --ion-text-color-rgb: 26, 29, 41;
+
+  --ion-card-background: #ffffff;
+  --ion-item-background: #ffffff;
+  --ion-toolbar-background: #f4f7fc;
+  --ion-tab-bar-background: #ffffff;
+
+  --ion-border-color: #e6eaf2;
+
+  /* ---- Tokens propios de la app ---- */
+  --bc-surface-1: #ffffff;        // tarjetas
+  --bc-surface-2: #f0f4fa;        // tarjetas secundarias / items de lista
+  --bc-surface-3: #eaf1fb;        // inputs, chips inactivos
+  --bc-danger-bg: rgba(235, 68, 90, 0.08);
+  --bc-danger-border: rgba(235, 68, 90, 0.25);
+  --bc-gradient-primary: linear-gradient(135deg, #2d8fff 0%, #1c66e0 100%);
+  --bc-shadow-card: 0 10px 30px rgba(45, 143, 255, 0.12);
+  --bc-shadow-btn: 0 8px 20px rgba(45, 143, 255, 0.35);
+  --bc-radius-lg: 22px;
+  --bc-radius-md: 16px;
+  --bc-radius-sm: 10px;
+
+  /* ---- Tipografía plantilla Ion Medical (ClanPro) ---- */
+  /* ⚠️ AVISO: los TTF de CBlack/CBold/CBook/CCond tienen la tabla cmap
+     corrupta (mapean 'ó'→glifo de 'y', 'ñ' a un glifo incorrecto, y
+     'á','é','í','ú' sin glifo). Hasta reemplazar esos .ttf por versiones
+     correctas, NO usar estas variables para texto visible en español;
+     usar --bc-font-medium (CMedium, cmap correcto) en su lugar. Quedan
+     definidas por compatibilidad y para posibles usos no textuales. */
+  --bc-font-black: 'CBlack';
+  --bc-font-bold: 'CBold';
+  --bc-font-medium: 'CMedium';
+  --bc-font-book: 'CBook';
+  --bc-font-cond: 'CCond';
+}
+
+@font-face {
+  font-family: 'CBlack';
+  font-style: normal;
+  font-weight: normal;
+  src: url('../assets/fonts/clanpro/clanpro-black.ttf');
+}
+
+@font-face {
+  font-family: 'CBold';
+  font-style: normal;
+  font-weight: normal;
+  src: url('../assets/fonts/clanpro/clanpro-bold.ttf');
+}
+
+@font-face {
+  font-family: 'CMedium';
+  font-style: normal;
+  font-weight: normal;
+  src: url('../assets/fonts/clanpro/clan-medium-regular.ttf');
+}
+
+@font-face {
+  font-family: 'CBook';
+  font-style: normal;
+  font-weight: normal;
+  src: url('../assets/fonts/clanpro/clanpro-book.ttf');
+}
+
+@font-face {
+  font-family: 'CCond';
+  font-style: normal;
+  font-weight: normal;
+  src: url('../assets/fonts/clanpro/clanpro-condbook.ttf');
+}

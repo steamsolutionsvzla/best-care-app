@@ -1,0 +1,88 @@
+<!-- src/app/perfil/perfil.page.html -->
+<ion-content [fullscreen]="true" class="perfil-content">
+
+  <!-- ===== Encabezado con avatar, nombre y rol ===== -->
+  <div class="perfil-header">
+    <div class="avatar-ring">
+      <img *ngIf="profile().avatarUrl; else fallbackAvatar" [src]="profile().avatarUrl" alt="avatar" />
+      <ng-template #fallbackAvatar>
+        <ion-icon name="person-circle-outline"></ion-icon>
+      </ng-template>
+    </div>
+
+    <h1>{{ fullName() }}</h1>
+    <p>Paciente</p>
+  </div>
+
+  <!-- ===== Hoja de contenido ===== -->
+  <div class="perfil-sheet">
+
+    <!-- Grupo: mis datos -->
+    <span class="perfil-eyebrow">Mis datos</span>
+    <div class="perfil-group">
+      <button class="perfil-item" (click)="goToEditProfile()">
+        <span class="perfil-item__icon perfil-item__icon--primary">
+          <ion-icon name="create-outline"></ion-icon>
+        </span>
+        <span class="perfil-item__body">
+          <span class="perfil-item__label">Editar mis datos</span>
+          <span class="perfil-item__value">Nombre, foto, fecha de nacimiento, tipo de sangre...</span>
+        </span>
+        <ion-icon class="perfil-item__chevron" name="chevron-forward"></ion-icon>
+      </button>
+    </div>
+
+    <!-- Grupo: seguridad -->
+    <span class="perfil-eyebrow">Seguridad</span>
+    <div class="perfil-group">
+      <button class="perfil-item" (click)="goToChangePassword()">
+        <span class="perfil-item__icon perfil-item__icon--primary">
+          <ion-icon name="lock-closed-outline"></ion-icon>
+        </span>
+        <span class="perfil-item__body">
+          <span class="perfil-item__label">Cambiar Contraseña</span>
+        </span>
+        <ion-icon class="perfil-item__chevron" name="chevron-forward"></ion-icon>
+      </button>
+    </div>
+
+    <!-- Grupo: cuenta -->
+    <span class="perfil-eyebrow">Cuenta</span>
+    <div class="perfil-group">
+      <button class="perfil-item" (click)="goToTerms()">
+        <span class="perfil-item__icon perfil-item__icon--success">
+          <ion-icon name="document-text-outline"></ion-icon>
+        </span>
+        <span class="perfil-item__body">
+          <span class="perfil-item__label">Términos &amp; Condiciones</span>
+        </span>
+        <ion-icon class="perfil-item__chevron" name="chevron-forward"></ion-icon>
+      </button>
+
+      <button class="perfil-item" (click)="logout()">
+        <span class="perfil-item__icon perfil-item__icon--warning">
+          <ion-icon name="log-out-outline"></ion-icon>
+        </span>
+        <span class="perfil-item__body">
+          <span class="perfil-item__label">Cerrar Sesión</span>
+        </span>
+        <ion-icon class="perfil-item__chevron" name="chevron-forward"></ion-icon>
+      </button>
+    </div>
+
+    <!-- Grupo: zona de riesgo -->
+    <div class="perfil-group">
+      <button class="perfil-item perfil-item--danger" (click)="deleteAccount()">
+        <span class="perfil-item__icon perfil-item__icon--danger">
+          <ion-icon name="trash-outline"></ion-icon>
+        </span>
+        <span class="perfil-item__body">
+          <span class="perfil-item__label">Eliminar mi cuenta</span>
+        </span>
+        <ion-icon class="perfil-item__chevron" name="chevron-forward"></ion-icon>
+      </button>
+    </div>
+
+  </div>
+
+</ion-content>

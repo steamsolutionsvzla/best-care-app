@@ -1,0 +1,107 @@
+// src/app/perfil/editar-perfil/editar-perfil.page.scss
+
+.editar-perfil-content {
+  --background: var(--ion-background-color);
+  --padding-start: 20px;
+  --padding-end: 20px;
+  --padding-bottom: 32px;
+}
+
+/* ===== Selector de foto de perfil ===== */
+.avatar-picker {
+  text-align: center;
+  padding: 12px 0 8px;
+
+  &__ring {
+    position: relative;
+    display: inline-flex;
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: var(--bc-surface-2);
+    border: 2px solid var(--bc-surface-2);
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    ion-icon {
+      font-size: 48px;
+      color: var(--ion-color-medium);
+    }
+  }
+
+  &__badge {
+    position: absolute;
+    right: -2px;
+    bottom: -2px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--ion-color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--ion-background-color);
+
+    ion-icon {
+      font-size: 15px;
+      color: #fff;
+    }
+  }
+
+  &__hint {
+    margin: 10px 0 0;
+    font-size: 12.5px;
+    color: var(--ion-color-medium);
+  }
+}
+
+/* ===== Grupos de campos ===== */
+.editar-perfil-eyebrow {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ion-color-primary);
+  margin: 18px 4px 8px;
+}
+
+.editar-perfil-card {
+  background: var(--bc-surface-1);
+  border-radius: var(--bc-radius-lg);
+  box-shadow: var(--bc-shadow-card);
+  padding: 14px 14px 4px;
+  display: flex;
+  flex-direction: column;
+}
+
+.bc-input {
+  --background: var(--bc-surface-2);
+  --border-radius: var(--bc-radius-md);
+  --padding-start: 14px;
+  border-radius: var(--bc-radius-md);
+  margin-bottom: 10px;
+
+  ion-icon {
+    color: var(--ion-color-medium);
+    margin-right: 8px;
+  }
+}
+
+.shadow-btn {
+  --box-shadow: var(--bc-shadow-btn);
+  margin-top: 20px;
+}
+
+.error-text {
+  font-size: 13px;
+  margin: 10px 4px 0;
+}

@@ -1,0 +1,68 @@
+<!-- src/app/auth/login/login.page.html -->
+<ion-content [fullscreen]="true" class="login-content">
+
+  <!-- ===== Header con marca y ola divisoria ===== -->
+  <div class="brand-header">
+    <div class="brand-mark">
+      <div class="brand-mark__ring"></div>
+      <ion-icon name="medical-outline"></ion-icon>
+    </div>
+    <h1>BEST CARE</h1>
+    <p>Sistema de Salud Digital</p>
+
+    <svg class="brand-wave" viewBox="0 0 600 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,40 C120,90 240,10 360,45 C450,72 540,30 600,50 L600,90 L0,90 Z" fill="rgba(255,255,255,0.16)"></path>
+      <path d="M0,60 C130,20 260,85 390,55 C480,35 550,70 600,58 L600,90 L0,90 Z" fill="var(--ion-background-color)">
+      </path>
+    </svg>
+  </div>
+
+  <div class="login-screen">
+
+    <!-- ===== Correo y contraseña ===== -->
+    <form class="credentials-form" (ngSubmit)="onLogin()">
+
+      <div class="field-group">
+        <span class="field-group__label">Correo electrónico</span>
+        <div class="field-group__control">
+          <ion-icon name="mail-outline"></ion-icon>
+          <ion-input type="email" inputmode="email" autocomplete="email" placeholder="Correo electrónico" [(ngModel)]="email"
+            name="email"></ion-input>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <span class="field-group__label">Contraseña</span>
+        <div class="field-group__control">
+          <ion-icon name="lock-closed-outline"></ion-icon>
+          <ion-input [type]="showPassword ? 'text' : 'password'" autocomplete="current-password"
+            placeholder="Contraseña" [(ngModel)]="password" name="password"></ion-input>
+          <button type="button" class="field-group__toggle" (click)="togglePassword()">
+            <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+          </button>
+        </div>
+      </div>
+
+      <ion-text color="danger" *ngIf="errorMessage()">
+        <p class="error-text">{{ errorMessage() }}</p>
+      </ion-text>
+
+      <ion-button expand="block" type="submit" class="submit-btn" [disabled]="submitting()">
+        <ion-spinner name="crescent" *ngIf="submitting()"></ion-spinner>
+        <ng-container *ngIf="!submitting()">
+          Iniciar Sesión
+          <ion-icon name="log-in-outline" slot="end"></ion-icon>
+        </ng-container>
+      </ion-button>
+
+      <p class="forgot-text">
+        ¿Olvidaste tu contraseña? <a routerLink="/auth/recuperar">Recuperar</a>
+      </p>
+
+      <ion-button expand="block" fill="clear" size="small" routerLink="/auth/register" class="register-link">
+        ¿No tienes cuenta? Crear cuenta
+      </ion-button>
+    </form>
+  </div>
+
+</ion-content>

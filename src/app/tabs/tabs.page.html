@@ -1,0 +1,24 @@
+<ion-tabs>
+  <ion-tab-bar slot="bottom" class="bc-bubble-tabbar">
+
+    <!-- Fondo de cristal con la muesca curva; separado de los botones
+         para que la burbuja activa pueda "escapar" y flotar por encima. -->
+    <div class="bc-bar-glass" [style.clip-path]="barClipPath()" aria-hidden="true"></div>
+
+    <ion-tab-button
+      *ngFor="let tab of tabs; let i = index"
+      [tab]="tab.value"
+      [href]="tab.href"
+      class="bc-bubble-btn"
+      [class.bc-bubble-btn--active]="activeIndex() === i"
+      [class.bc-bubble-btn--on-dark]="activeIndex() === i && tab.darkBg"
+      [attr.aria-label]="tab.label"
+    >
+      <span class="bc-bubble">
+        <ion-icon [name]="tab.icon"></ion-icon>
+      </span>
+      <span class="bc-bubble-caption">{{ tab.label }}</span>
+    </ion-tab-button>
+
+  </ion-tab-bar>
+</ion-tabs>

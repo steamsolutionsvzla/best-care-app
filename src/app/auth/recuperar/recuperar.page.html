@@ -1,0 +1,72 @@
+<!-- src/app/auth/recuperar/recuperar.page.html -->
+<ion-content [fullscreen]="true" class="recuperar-content">
+
+  <!-- ===== Header con marca y ola divisoria (mismo estilo que login/register) ===== -->
+  <div class="brand-header">
+    <button type="button" class="back-btn" (click)="goToLogin()" aria-label="Volver a iniciar sesión">
+      <ion-icon name="arrow-back-outline"></ion-icon>
+    </button>
+
+    <div class="brand-mark">
+      <div class="brand-mark__ring"></div>
+      <ion-icon name="lock-open-outline"></ion-icon>
+    </div>
+    <h1>Recuperar contraseña</h1>
+    <p>Te ayudamos a volver a entrar a tu cuenta</p>
+
+    <svg class="brand-wave" viewBox="0 0 600 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,40 C120,90 240,10 360,45 C450,72 540,30 600,50 L600,90 L0,90 Z" fill="rgba(255,255,255,0.16)"></path>
+      <path d="M0,60 C130,20 260,85 390,55 C480,35 550,70 600,58 L600,90 L0,90 Z" fill="var(--ion-background-color)">
+      </path>
+    </svg>
+  </div>
+
+  <div class="recuperar-screen">
+
+    <!-- ===== Estado 1: pedir el correo ===== -->
+    <form class="credentials-form" *ngIf="!sent()" (ngSubmit)="onSubmit()">
+      <p class="intro-text">
+        Escribe el correo con el que te registraste; te enviaremos las instrucciones para restablecer tu contraseña.
+      </p>
+
+      <div class="field-group">
+        <span class="field-group__label">Correo electrónico</span>
+        <div class="field-group__control">
+          <ion-icon name="mail-outline"></ion-icon>
+          <ion-input type="email" inputmode="email" autocomplete="email" placeholder="Correo electrónico"
+            [(ngModel)]="email" name="email"></ion-input>
+        </div>
+      </div>
+
+      <ion-text color="danger" *ngIf="errorMessage()">
+        <p class="error-text">{{ errorMessage() }}</p>
+      </ion-text>
+
+      <ion-button expand="block" type="submit" class="submit-btn" [disabled]="submitting()">
+        <ion-spinner name="crescent" *ngIf="submitting()"></ion-spinner>
+        <ng-container *ngIf="!submitting()">
+          Enviar instrucciones
+          <ion-icon name="paper-plane-outline" slot="end"></ion-icon>
+        </ng-container>
+      </ion-button>
+
+      <ion-button expand="block" fill="clear" size="small" routerLink="/auth/login" class="back-link">
+        Volver a iniciar sesión
+      </ion-button>
+    </form>
+
+    <!-- ===== Estado 2: confirmación de envío ===== -->
+    <div class="confirmation" *ngIf="sent()">
+      <ion-icon name="checkmark-circle-outline" class="confirmation__icon"></ion-icon>
+      <h2>Revisa tu correo</h2>
+      <p>
+        Si <strong>{{ email }}</strong> está registrado en Best Care, te enviamos un correo con los pasos para
+        restablecer tu contraseña.
+      </p>
+      <ion-button expand="block" class="submit-btn" (click)="goToLogin()">
+        Volver a iniciar sesión
+      </ion-button>
+    </div>
+  </div>
+
+</ion-content>

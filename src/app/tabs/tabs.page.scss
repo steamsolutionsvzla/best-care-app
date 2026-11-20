@@ -1,0 +1,120 @@
+/* ===== Tab bar "burbuja flotante" =====
+   Píldora de cristal flotante centrada, con una muesca curva bajo la
+   pestaña activa: el ícono de esa pestaña se eleva sobre una burbuja
+   de degradado azul (paleta de la app) que "escapa" del recorte de la
+   barra, tal como el diseño de referencia. Al cambiar de pestaña, la
+   muesca (clip-path) y la burbuja (transform) se animan en conjunto. */
+
+ion-tabs {
+  // Espacio necesario para que la burbuja pueda sobresalir sin recortarse.
+  --bc-tabbar-overflow: 30px;
+}
+
+ion-tab-bar {
+  --background: transparent;
+  --border: none;
+  position: relative;
+  display: flex;
+  width: 300px;
+  height: 74px;
+  margin: 0 auto 18px;
+  border: none;
+  contain: none;
+  overflow: visible;
+  z-index: 10;
+}
+
+/* Panel de cristal: fondo translúcido + desenfoque, recortado con la
+   forma de píldora + muesca curva. Va detrás de los botones para que
+   la burbuja activa pueda flotar libremente por encima de él. */
+.bc-bar-glass {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 999px; // fallback si el navegador no soporta clip-path: path()
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.14);
+  transition: clip-path 0.45s cubic-bezier(0.65, 0, 0.35, 1);
+  pointer-events: none;
+  z-index: 0;
+}
+
+ion-tab-button {
+  position: relative;
+  z-index: 1;
+  --color: var(--ion-color-medium);
+  --color-selected: var(--ion-color-primary);
+  --padding-top: 0;
+  --padding-bottom: 0;
+
+  &::part(native) {
+    overflow: visible;
+    background: transparent;
+  }
+
+  /* Ícono flotante: en reposo, centrado dentro de la barra; al activarse
+     se convierte en una burbuja con degradado que sube por encima del
+     recorte, con transición suave de posición, tamaño y color. */
+  .bc-bubble {
+    position: relative;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    box-shadow: none;
+    transition: transform 0.45s cubic-bezier(0.65, 0, 0.35, 1),
+                background 0.35s ease,
+                box-shadow 0.35s ease;
+
+    ion-icon {
+      font-size: 20px;
+      color: var(--ion-color-medium);
+      transition: color 0.3s ease, font-size 0.3s ease;
+    }
+  }
+
+  .bc-bubble-caption {
+    display: block;
+    margin-top: 3px;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--ion-color-primary);
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.3s ease, transform 0.3s ease, color 0.3s ease;
+    white-space: nowrap;
+  }
+
+  &.bc-bubble-btn--active {
+    .bc-bubble {
+      background: var(--bc-gradient-primary);
+      transform: translateY(-30px) scale(1.06);
+      box-shadow: var(--bc-shadow-btn);
+
+      ion-icon {
+        color: #fff;
+        font-size: 21px;
+      }
+    }
+
+    .bc-bubble-caption {
+      opacity: 1;
+      transform: translateY(-6px);
+    }
+  }
+
+  /* Sobre páginas con fondo oscuro/degradado azul (p. ej. Perfil), el
+     cristal de la barra se ve teñido de azul: la etiqueta cambia a
+     blanco para mantener buen contraste; en páginas claras se queda
+     en azul primario (color por defecto de .bc-bubble-caption). */
+  &.bc-bubble-btn--on-dark {
+    .bc-bubble-caption {
+      color: #fff;
+    }
+  }
+}

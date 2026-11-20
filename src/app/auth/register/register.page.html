@@ -1,0 +1,100 @@
+<!-- src/app/auth/register/register.page.html -->
+<ion-content [fullscreen]="true" class="register-content">
+
+  <div class="header-container">
+    <div class="back">
+      <img src="assets/imgs/loginupheader.svg" alt="" />
+    </div>
+    <div class="front">
+      <div class="brand-icon">
+        <ion-icon name="person-add-outline"></ion-icon>
+      </div>
+      <h1>Crear Cuenta</h1>
+      <p>Únete a Best Care en un par de pasos</p>
+    </div>
+  </div>
+
+  <div class="register-container">
+    <div class="access-card">
+      <div class="bc-eyebrow">Nuevo paciente</div>
+      <h2>Tus datos de acceso</h2>
+
+      <ion-item class="bc-input" lines="none">
+        <ion-icon name="person-outline" slot="start"></ion-icon>
+        <ion-input label="Nombres" labelPlacement="floating" type="text" [(ngModel)]="firstName">
+        </ion-input>
+      </ion-item>
+
+      <ion-item class="bc-input" lines="none">
+        <ion-icon name="person-outline" slot="start"></ion-icon>
+        <ion-input label="Apellidos" labelPlacement="floating" type="text" [(ngModel)]="lastName">
+        </ion-input>
+      </ion-item>
+
+      <div class="doc-row">
+        <ion-item class="bc-input doc-row__type" lines="none">
+          <ion-icon name="id-card-outline" slot="start"></ion-icon>
+          <ion-select label="Tipo" labelPlacement="floating" interface="popover"
+            [interfaceOptions]="documentTypePopoverOptions" [(ngModel)]="documentType">
+            <ion-select-option value="V">V (Venezolano)</ion-select-option>
+            <ion-select-option value="E">E (Extranjero)</ion-select-option>
+            <ion-select-option value="P">P (Pasaporte)</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item class="bc-input doc-row__id" lines="none">
+          <ion-input label="Cédula" labelPlacement="floating" type="text" inputmode="numeric" placeholder="12345678"
+            [(ngModel)]="documentId">
+          </ion-input>
+        </ion-item>
+      </div>
+
+      <ion-item class="bc-input" lines="none">
+        <ion-icon name="call-outline" slot="start"></ion-icon>
+        <ion-input label="Teléfono" labelPlacement="floating" type="tel" placeholder="+52 55 1234 5678"
+          [(ngModel)]="phone">
+        </ion-input>
+      </ion-item>
+
+      <ion-item class="bc-input" lines="none">
+        <ion-icon name="mail-outline" slot="start"></ion-icon>
+        <ion-input label="Correo Electrónico" labelPlacement="floating" type="email" [(ngModel)]="email">
+        </ion-input>
+      </ion-item>
+
+      <ion-item class="bc-input" lines="none">
+        <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+        <ion-input label="Contraseña" labelPlacement="floating" [type]="showPassword ? 'text' : 'password'"
+          [(ngModel)]="password">
+        </ion-input>
+        <button type="button" class="bc-input__toggle" slot="end" (click)="togglePassword()">
+          <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+        </button>
+      </ion-item>
+
+      <ion-item class="bc-input" lines="none">
+        <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+        <ion-input label="Confirmar Contraseña" labelPlacement="floating"
+          [type]="showConfirmPassword ? 'text' : 'password'" [(ngModel)]="confirmPassword">
+        </ion-input>
+        <button type="button" class="bc-input__toggle" slot="end" (click)="toggleConfirmPassword()">
+          <ion-icon [name]="showConfirmPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+        </button>
+      </ion-item>
+
+      <ion-text color="danger" *ngIf="errorMessage()">
+        <p class="error-text">{{ errorMessage() }}</p>
+      </ion-text>
+
+      <ion-button expand="block" class="shadow-btn" [disabled]="submitting()" (click)="onRegister()">
+        <ion-spinner *ngIf="submitting()" name="crescent"></ion-spinner>
+        <span *ngIf="!submitting()">Registrarse</span>
+      </ion-button>
+
+      <ion-button expand="block" fill="clear" size="small" routerLink="/auth/login" class="register-link">
+        Ya tengo cuenta
+      </ion-button>
+    </div>
+  </div>
+
+</ion-content>

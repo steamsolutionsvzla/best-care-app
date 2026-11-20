@@ -1,0 +1,212 @@
+// src/app/auth/recuperar/recuperar.page.scss
+// Reutiliza el mismo lenguaje visual de login.page.scss (header con
+// gradiente + ola, field-group tipo pill, submit-btn) para que la
+// pantalla se sienta parte del mismo flujo de autenticación.
+
+.recuperar-content {
+  --background: var(--ion-background-color);
+}
+
+.brand-header {
+  position: relative;
+  background: var(--bc-gradient-primary);
+  padding: 56px 20px 46px;
+  text-align: center;
+  overflow: hidden;
+
+  .back-btn {
+    position: absolute;
+    top: 18px;
+    left: 14px;
+    z-index: 2;
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    ion-icon {
+      font-size: 20px;
+      color: #fff;
+    }
+  }
+
+  .brand-mark {
+    position: relative;
+    width: 84px;
+    height: 84px;
+    margin: 0 auto 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &__ring {
+      position: absolute;
+      inset: 0;
+      border: 3px solid rgba(255, 255, 255, 0.55);
+      border-radius: 50%;
+      transform: rotate(-18deg) scaleX(1.15);
+    }
+
+    ion-icon {
+      position: relative;
+      z-index: 1;
+      font-size: 34px;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(4px);
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  h1 {
+    font-family: var(--bc-font-medium), sans-serif;
+    font-size: 21px;
+    letter-spacing: 0.3px;
+    color: #fff;
+    margin: 0 0 4px;
+  }
+
+  p {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.85);
+    margin: 0;
+    padding: 0 12px;
+  }
+
+  .brand-wave {
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 100%;
+    height: 70px;
+    display: block;
+  }
+}
+
+.recuperar-screen {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 4px 24px 24px;
+}
+
+.credentials-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.intro-text {
+  font-size: 13.5px;
+  color: var(--ion-color-medium);
+  text-align: center;
+  margin: 4px 0 6px;
+}
+
+.field-group {
+  position: relative;
+  margin-top: 22px;
+
+  &__label {
+    position: absolute;
+    top: -10px;
+    left: 18px;
+    z-index: 2;
+    background: var(--ion-background-color);
+    color: var(--ion-color-primary);
+    font-family: var(--bc-font-medium), sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 0 8px;
+    border-radius: 8px;
+  }
+
+  &__control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1.5px solid var(--ion-color-primary);
+    border-radius: 999px;
+    padding: 4px 16px;
+    background: var(--bc-surface-1);
+
+    ion-icon:first-child {
+      font-size: 18px;
+      color: var(--ion-color-primary);
+      flex-shrink: 0;
+    }
+
+    ion-input {
+      --padding-start: 0;
+      --padding-end: 0;
+      --padding-top: 12px;
+      --padding-bottom: 12px;
+      font-size: 15px;
+      --placeholder-color: var(--ion-color-medium);
+      --placeholder-opacity: 1;
+    }
+  }
+}
+
+.submit-btn {
+  margin-top: 26px;
+  --border-radius: 999px;
+  --box-shadow: var(--bc-shadow-btn);
+  font-family: var(--bc-font-medium), sans-serif;
+  letter-spacing: 0.3px;
+
+  ion-icon {
+    margin-inline-start: 6px;
+    font-size: 18px;
+  }
+}
+
+.back-link {
+  margin-top: 10px;
+  --color: var(--ion-color-medium);
+}
+
+.error-text {
+  font-size: 13px;
+  margin: 4px 0 0;
+}
+
+/* ===== Estado de confirmación ===== */
+.confirmation {
+  text-align: center;
+  padding-top: 12px;
+
+  &__icon {
+    font-size: 56px;
+    color: var(--ion-color-success);
+    margin-bottom: 10px;
+  }
+
+  h2 {
+    font-family: var(--bc-font-medium), sans-serif;
+    font-size: 19px;
+    margin: 0 0 8px;
+    color: var(--ion-text-color);
+  }
+
+  p {
+    font-size: 14px;
+    color: var(--ion-color-medium);
+    line-height: 1.5;
+    margin: 0 0 20px;
+
+    strong {
+      color: var(--ion-text-color);
+    }
+  }
+}

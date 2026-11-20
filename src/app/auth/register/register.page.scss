@@ -1,0 +1,153 @@
+// src/app/auth/register/register.page.scss
+
+.register-content {
+  --background: var(--ion-background-color);
+}
+
+.header-container {
+  position: relative;
+  height: 190px;
+  width: 100%;
+
+  .back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 190px;
+
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  }
+
+  .front {
+    position: relative;
+    z-index: 2;
+    padding-top: 40px;
+    text-align: center;
+
+    .brand-icon {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 10px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      ion-icon {
+        font-size: 28px;
+        color: #fff;
+      }
+    }
+
+    h1 {
+      font-family: var(--bc-font-medium), sans-serif;
+      font-size: 20px;
+      color: #fff;
+      margin: 0 0 2px;
+    }
+
+    p {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.85);
+      margin: 0;
+    }
+  }
+}
+
+.register-container {
+  position: relative;
+  z-index: 3;
+  max-width: 420px;
+  margin: -28px auto 0;
+  padding: 0 20px 24px;
+}
+
+.access-card {
+  background: var(--bc-surface-1);
+  border-radius: var(--bc-radius-lg);
+  box-shadow: var(--bc-shadow-card);
+  padding: 22px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  h2 {
+    font-family: var(--bc-font-medium), sans-serif;
+    font-size: 20px;
+    margin: 2px 0 10px;
+    color: var(--ion-text-color);
+  }
+}
+
+.bc-input {
+  --background: var(--bc-surface-2);
+  --border-radius: var(--bc-radius-md);
+  --padding-start: 14px;
+  border-radius: var(--bc-radius-md);
+  margin-bottom: 4px;
+
+  ion-icon {
+    color: var(--ion-color-medium);
+    margin-right: 8px;
+  }
+
+  &__toggle {
+    background: none;
+    border: none;
+    padding: 4px;
+    margin-right: 6px;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+
+    ion-icon {
+      font-size: 19px;
+      color: var(--ion-color-medium);
+      margin-right: 0;
+    }
+  }
+}
+
+.doc-row {
+  display: flex;
+  gap: 10px;
+
+  &__type {
+    flex: 0 0 92px;
+
+    ion-select {
+      max-width: 100%;
+    }
+  }
+
+  &__id {
+    flex: 1;
+  }
+}
+
+.shadow-btn {
+  --box-shadow: var(--bc-shadow-btn);
+  margin-top: 8px;
+}
+
+.register-link {
+  --color: var(--ion-color-medium);
+}
+
+.error-text {
+  font-size: 13px;
+  margin: 4px 0;
+}
+
+.footer-note {
+  text-align: center;
+  font-size: 11px;
+  color: var(--ion-color-medium);
+  margin-top: 16px;
+}
