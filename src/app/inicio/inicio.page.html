@@ -1,36 +1,37 @@
 <!-- src/app/inicio/inicio.page.html -->
-<ion-header class="ion-no-border">
-  <ion-toolbar>
-    <ion-title>Inicio</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="inicio-content">
 
-<ion-content class="ion-padding">
-
-  <!-- ===== Tarjeta principal ===== -->
+  <!-- ===== Hero superior (tarjeta principal full-bleed) ===== -->
   <div class="profile-card" (click)="goToEditProfile()" role="button" tabindex="0">
     <div class="profile-card-top">
       <div class="brand">
-        <ion-icon name="medical-outline"></ion-icon>
+        <span class="brand-badge">
+          <ion-icon name="add-outline"></ion-icon>
+        </span>
         <span>BEST CARE</span>
       </div>
-      <span class="bc-pill bc-pill--success">Activa</span>
+      <span class="status-pill">
+        <span class="status-dot"></span>
+        Activa
+      </span>
     </div>
 
     <div class="profile-card-body">
-      <img [src]="profile().avatarUrl || 'assets/imgs/icn-avatar.svg'" alt="avatar" />
+      <div class="profile-avatar">
+        <img [src]="profile().avatarUrl || 'assets/imgs/icn-avatar.svg'" alt="avatar" />
+        <span class="profile-avatar-badge" aria-hidden="true">
+          <ion-icon name="checkmark"></ion-icon>
+        </span>
+      </div>
+
       <div class="profile-card-info">
         <h2>{{ fullName() }}</h2>
         <p>Nac. {{ profile().birthDate | date:'d MMM y':'':'es-MX' }} · {{ age() }} años</p>
       </div>
 
-      <!-- ===== Miniatura del QR de emergencia, siempre visible en la tarjeta ===== -->
-      <button
-        type="button"
-        class="profile-card-qr"
-        aria-label="Ver mi código QR de emergencia completo"
-        (click)="$event.stopPropagation(); openQr()"
-      >
+      <!-- ===== Miniatura del QR de emergencia ===== -->
+      <button type="button" class="profile-card-qr" aria-label="Ver mi código QR de emergencia completo"
+        (click)="$event.stopPropagation(); openQr()">
         <img *ngIf="qrDataUrl() as src" [src]="src" alt="Código QR de emergencia" />
         <ion-icon *ngIf="!qrDataUrl()" name="qr-code-outline"></ion-icon>
         <span class="profile-card-qr-expand">
@@ -40,33 +41,54 @@
     </div>
   </div>
 
-  <!-- ===== Ventanas seleccionables: Alergias / Medicamentos / Diagnósticos / Contactos =====
-       Cada fila abre una ventana emergente (ion-modal) con el detalle completo de ese
-       segmento: la lista de lo ya registrado y, dentro de la misma ventana, una sección
-       desplegable para agregar información nueva. Ya no hay un botón "+" separado ni un
-       estado de pestaña "activa": tocar la fila es lo que abre el detalle. -->
-  <div class="bc-select-list" role="list">
-    <button
-      *ngFor="let tab of profileTabs"
-      type="button"
-      class="bc-select-row"
-      role="listitem"
-      [attr.aria-label]="'Ver ' + tab.label"
-      (click)="openSegment(tab.value)"
-    >
-      <div class="bc-select-icon" [class]="tab.colorClass">
-        <ion-icon [name]="tab.icon"></ion-icon>
+  <!-- ===== Slider de banners ===== -->
+  <div class="banner-section">
+    <div #bannerSlider class="banner-slider" (scroll)="onBannerScroll($event)" role="region"
+      aria-label="Avisos y accesos rápidos">
+      <div *ngFor="let banner of banners" class="banner-card" [class]="'banner-card--' + banner.theme" /*
+        (click)="openBanner(banner)" */ role="button" tabindex="0">
+        <ion-icon [name]="banner.icon" class="banner-watermark" aria-hidden="true"></ion-icon>
+        <div class="banner-overlay">
+          <h3>{{ banner.title }}</h3>
+          <p>{{ banner.subtitle }}</p>
+          <!-- <span class="banner-cta">
+            {{ banner.cta }}
+            <ion-icon name="chevron-forward"></ion-icon>
+          </span> -->
+        </div>
       </div>
-      <div class="bc-select-body">
-        <strong>{{ tab.label }}</strong>
-        <span>{{ countLabel(tab.value) }}</span>
-      </div>
-      <ion-icon name="chevron-forward" class="bc-select-chevron"></ion-icon>
-    </button>
+    </div>
+
+    <div class="banner-dots" aria-hidden="true">
+      <button *ngFor="let b of banners; let i = index" type="button" class="banner-dot"
+        [class.banner-dot--active]="activeBanner() === i" (click)="scrollToBanner(i)"></button>
+    </div>
+  </div>
+
+  <!-- ===== Grid 2 columnas: Gestionar datos ===== -->
+  <div class="inicio-body">
+    <h3 class="section-title">Gestionar datos</h3>
+
+    <div class="bc-grid" role="list">
+      <button *ngFor="let tab of profileTabs" type="button" class="bc-grid-card" role="listitem"
+        [attr.aria-label]="'Ver ' + tab.label" (click)="openSegment(tab.value)">
+        <div class="bc-grid-head">
+          <div class="bc-select-icon" [class]="tab.colorClass">
+            <ion-icon [name]="tab.icon"></ion-icon>
+          </div>
+          <ion-icon name="chevron-forward" class="bc-select-chevron"></ion-icon>
+        </div>
+        <div class="bc-grid-body">
+          <strong>{{ tab.label }}</strong>
+          <span>{{ countLabel(tab.value) }}</span>
+        </div>
+      </button>
+    </div>
   </div>
 
   <!-- ===== Modal: QR de emergencia ===== -->
-  <ion-modal [isOpen]="isQrOpen()" [breakpoints]="[0, 0.85, 1]" [initialBreakpoint]="0.85" (didDismiss)="closeQr()" class="bc-add-modal bc-qr-modal">
+  <ion-modal [isOpen]="isQrOpen()" [breakpoints]="[0, 0.85, 1]" [initialBreakpoint]="0.85" (didDismiss)="closeQr()"
+    class="bc-add-modal bc-qr-modal">
     <ng-template>
       <ion-content class="ion-padding bc-modal-content">
         <div class="bc-modal-head">
@@ -94,7 +116,9 @@
   </ion-modal>
 
   <!-- ===== Modal: Alergias (lista + alta desplegable) ===== -->
-  <ion-modal [isOpen]="isAllergiesOpen()" [breakpoints]="[0, 0.9, 1]" [initialBreakpoint]="0.9" (didDismiss)="closeAllergiesModal()" (ionModalWillPresent)="logModalEvent('alergias', 'willPresent')" class="bc-add-modal">
+  <ion-modal [isOpen]="isAllergiesOpen()" [breakpoints]="[0, 0.9, 1]" [initialBreakpoint]="0.9"
+    (didDismiss)="closeAllergiesModal()" (ionModalWillPresent)="logModalEvent('alergias', 'willPresent')"
+    class="bc-add-modal">
     <ng-template>
       <ion-content class="ion-padding bc-modal-content">
         <div class="bc-modal-head">
@@ -135,36 +159,19 @@
             <label class="bc-field-label">Nombre de la alergia</label>
             <div class="bc-input-box">
               <ion-icon name="alert-circle-outline"></ion-icon>
-              <input
-                type="text"
-                placeholder="Ej. Penicilina"
-                [(ngModel)]="newAllergyName"
-                name="newAllergyName"
-              />
+              <input type="text" placeholder="Ej. Penicilina" [(ngModel)]="newAllergyName" name="newAllergyName" />
             </div>
           </div>
 
           <div class="bc-field">
             <label class="bc-field-label">Nivel de severidad</label>
             <div class="bc-seg-tabs">
-              <button
-                type="button"
-                class="bc-seg-tab"
-                [class.bc-seg-tab--active]="newAllergySeverity === 'leve'"
-                (click)="newAllergySeverity = 'leve'"
-              >Leve</button>
-              <button
-                type="button"
-                class="bc-seg-tab"
-                [class.bc-seg-tab--active]="newAllergySeverity === 'moderada'"
-                (click)="newAllergySeverity = 'moderada'"
-              >Moderada</button>
-              <button
-                type="button"
-                class="bc-seg-tab"
-                [class.bc-seg-tab--active]="newAllergySeverity === 'severa'"
-                (click)="newAllergySeverity = 'severa'"
-              >Severa</button>
+              <button type="button" class="bc-seg-tab" [class.bc-seg-tab--active]="newAllergySeverity === 'leve'"
+                (click)="newAllergySeverity = 'leve'">Leve</button>
+              <button type="button" class="bc-seg-tab" [class.bc-seg-tab--active]="newAllergySeverity === 'moderada'"
+                (click)="newAllergySeverity = 'moderada'">Moderada</button>
+              <button type="button" class="bc-seg-tab" [class.bc-seg-tab--active]="newAllergySeverity === 'severa'"
+                (click)="newAllergySeverity = 'severa'">Severa</button>
             </div>
           </div>
 
@@ -172,24 +179,15 @@
             <label class="bc-field-label">Reacción</label>
             <div class="bc-input-box">
               <ion-icon name="pulse-outline"></ion-icon>
-              <input
-                type="text"
-                placeholder="Ej. Urticaria, hinchazón..."
-                [(ngModel)]="newAllergyReaction"
-                name="newAllergyReaction"
-              />
+              <input type="text" placeholder="Ej. Urticaria, hinchazón..." [(ngModel)]="newAllergyReaction"
+                name="newAllergyReaction" />
             </div>
           </div>
 
           <div class="bc-field">
             <label class="bc-field-label">Notas (opcional)</label>
-            <textarea
-              class="bc-textarea"
-              rows="3"
-              placeholder="Detalles adicionales para el personal médico..."
-              [(ngModel)]="newAllergyNotes"
-              name="newAllergyNotes"
-            ></textarea>
+            <textarea class="bc-textarea" rows="3" placeholder="Detalles adicionales para el personal médico..."
+              [(ngModel)]="newAllergyNotes" name="newAllergyNotes"></textarea>
           </div>
 
           <p class="modal-error" *ngIf="addAllergyError()">{{ addAllergyError() }}</p>
@@ -204,7 +202,9 @@
   </ion-modal>
 
   <!-- ===== Modal: Medicamentos (lista + alta desplegable) ===== -->
-  <ion-modal [isOpen]="isMedicationsOpen()" [breakpoints]="[0, 0.9, 1]" [initialBreakpoint]="0.9" (didDismiss)="closeMedicationsModal()" (ionModalWillPresent)="logModalEvent('medicamentos', 'willPresent')" class="bc-add-modal">
+  <ion-modal [isOpen]="isMedicationsOpen()" [breakpoints]="[0, 0.9, 1]" [initialBreakpoint]="0.9"
+    (didDismiss)="closeMedicationsModal()" (ionModalWillPresent)="logModalEvent('medicamentos', 'willPresent')"
+    class="bc-add-modal">
     <ng-template>
       <ion-content class="ion-padding bc-modal-content">
         <div class="bc-modal-head">
@@ -247,12 +247,8 @@
             <label class="bc-field-label">Nombre del medicamento</label>
             <div class="bc-input-box">
               <ion-icon name="medical-outline"></ion-icon>
-              <input
-                type="text"
-                placeholder="Ej. Metformina"
-                [(ngModel)]="newMedicationName"
-                name="newMedicationName"
-              />
+              <input type="text" placeholder="Ej. Metformina" [(ngModel)]="newMedicationName"
+                name="newMedicationName" />
             </div>
           </div>
 
@@ -260,12 +256,8 @@
             <label class="bc-field-label">Dosis</label>
             <div class="bc-input-box">
               <ion-icon name="medkit-outline"></ion-icon>
-              <input
-                type="text"
-                placeholder="Ej. 500 mg"
-                [(ngModel)]="newMedicationDosage"
-                name="newMedicationDosage"
-              />
+              <input type="text" placeholder="Ej. 500 mg" [(ngModel)]="newMedicationDosage"
+                name="newMedicationDosage" />
             </div>
           </div>
 
@@ -273,24 +265,15 @@
             <label class="bc-field-label">Frecuencia</label>
             <div class="bc-input-box">
               <ion-icon name="time-outline"></ion-icon>
-              <input
-                type="text"
-                placeholder="Ej. Cada 8 horas"
-                [(ngModel)]="newMedicationFrequency"
-                name="newMedicationFrequency"
-              />
+              <input type="text" placeholder="Ej. Cada 8 horas" [(ngModel)]="newMedicationFrequency"
+                name="newMedicationFrequency" />
             </div>
           </div>
 
           <div class="bc-field">
             <label class="bc-field-label">Notas (opcional)</label>
-            <textarea
-              class="bc-textarea"
-              rows="3"
-              placeholder="Detalles adicionales para el personal médico..."
-              [(ngModel)]="newMedicationNotes"
-              name="newMedicationNotes"
-            ></textarea>
+            <textarea class="bc-textarea" rows="3" placeholder="Detalles adicionales para el personal médico..."
+              [(ngModel)]="newMedicationNotes" name="newMedicationNotes"></textarea>
           </div>
 
           <p class="modal-error" *ngIf="addMedicationError()">{{ addMedicationError() }}</p>
@@ -305,7 +288,9 @@
   </ion-modal>
 
   <!-- ===== Modal: Diagnósticos (lista + alta desplegable) ===== -->
-  <ion-modal [isOpen]="isDiagnosesOpen()" [breakpoints]="[0, 0.9, 1]" [initialBreakpoint]="0.9" (didDismiss)="closeDiagnosesModal()" (ionModalWillPresent)="logModalEvent('diagnosticos', 'willPresent')" class="bc-add-modal">
+  <ion-modal [isOpen]="isDiagnosesOpen()" [breakpoints]="[0, 0.9, 1]" [initialBreakpoint]="0.9"
+    (didDismiss)="closeDiagnosesModal()" (ionModalWillPresent)="logModalEvent('diagnosticos', 'willPresent')"
+    class="bc-add-modal">
     <ng-template>
       <ion-content class="ion-padding bc-modal-content">
         <div class="bc-modal-head">
@@ -351,60 +336,37 @@
             <label class="bc-field-label">Nombre del diagnóstico</label>
             <div class="bc-input-box">
               <ion-icon name="document-text-outline"></ion-icon>
-              <input
-                type="text"
-                placeholder="Ej. Hipertensión"
-                [(ngModel)]="newDiagnosisName"
-                name="newDiagnosisName"
-              />
+              <input type="text" placeholder="Ej. Hipertensión" [(ngModel)]="newDiagnosisName"
+                name="newDiagnosisName" />
             </div>
           </div>
 
           <div class="bc-field">
             <label class="bc-field-label">Estado</label>
             <div class="bc-seg-tabs">
-              <button
-                type="button"
-                class="bc-seg-tab"
-                [class.bc-seg-tab--active]="newDiagnosisStatus === 'activo'"
-                (click)="newDiagnosisStatus = 'activo'"
-              >Activo</button>
-              <button
-                type="button"
-                class="bc-seg-tab"
-                [class.bc-seg-tab--active]="newDiagnosisStatus === 'controlado'"
-                (click)="newDiagnosisStatus = 'controlado'"
-              >Controlado</button>
-              <button
-                type="button"
-                class="bc-seg-tab"
-                [class.bc-seg-tab--active]="newDiagnosisStatus === 'resuelto'"
-                (click)="newDiagnosisStatus = 'resuelto'"
-              >Resuelto</button>
+              <button type="button" class="bc-seg-tab" [class.bc-seg-tab--active]="newDiagnosisStatus === 'activo'"
+                (click)="newDiagnosisStatus = 'activo'">Activo</button>
+              <button type="button" class="bc-seg-tab" [class.bc-seg-tab--active]="newDiagnosisStatus === 'controlado'"
+                (click)="newDiagnosisStatus = 'controlado'">Controlado</button>
+              <button type="button" class="bc-seg-tab" [class.bc-seg-tab--active]="newDiagnosisStatus === 'resuelto'"
+                (click)="newDiagnosisStatus = 'resuelto'">Resuelto</button>
             </div>
           </div>
 
           <div class="bc-field">
             <label class="bc-field-label">Fecha de diagnóstico (opcional)</label>
-            <div class="bc-input-box">
-              <ion-icon name="calendar-outline"></ion-icon>
-              <input
-                type="date"
-                [(ngModel)]="newDiagnosisDate"
-                name="newDiagnosisDate"
-              />
-            </div>
+            <app-date-picker
+              label="Fecha de diagnóstico"
+              placeholder="Seleccionar fecha"
+              icon="calendar-outline"
+              [(ngModel)]="newDiagnosisDate"
+            ></app-date-picker>
           </div>
 
           <div class="bc-field">
             <label class="bc-field-label">Notas (opcional)</label>
-            <textarea
-              class="bc-textarea"
-              rows="3"
-              placeholder="Detalles adicionales para el personal médico..."
-              [(ngModel)]="newDiagnosisNotes"
-              name="newDiagnosisNotes"
-            ></textarea>
+            <textarea class="bc-textarea" rows="3" placeholder="Detalles adicionales para el personal médico..."
+              [(ngModel)]="newDiagnosisNotes" name="newDiagnosisNotes"></textarea>
           </div>
 
           <p class="modal-error" *ngIf="addDiagnosisError()">{{ addDiagnosisError() }}</p>
@@ -419,7 +381,9 @@
   </ion-modal>
 
   <!-- ===== Modal: Contactos de emergencia (lista + alta desplegable) ===== -->
-  <ion-modal [isOpen]="isContactsOpen()" [breakpoints]="[0, 0.9, 1]" [initialBreakpoint]="0.9" (didDismiss)="closeContactsModal()" (ionModalWillPresent)="logModalEvent('contactos', 'willPresent')" class="bc-add-modal">
+  <ion-modal [isOpen]="isContactsOpen()" [breakpoints]="[0, 0.9, 1]" [initialBreakpoint]="0.9"
+    (didDismiss)="closeContactsModal()" (ionModalWillPresent)="logModalEvent('contactos', 'willPresent')"
+    class="bc-add-modal">
     <ng-template>
       <ion-content class="ion-padding bc-modal-content">
         <div class="bc-modal-head">
@@ -462,12 +426,7 @@
             <label class="bc-field-label">Nombre</label>
             <div class="bc-input-box">
               <ion-icon name="person-outline"></ion-icon>
-              <input
-                type="text"
-                placeholder="Ej. María Pérez"
-                [(ngModel)]="newContactName"
-                name="newContactName"
-              />
+              <input type="text" placeholder="Ej. María Pérez" [(ngModel)]="newContactName" name="newContactName" />
             </div>
           </div>
 
@@ -475,12 +434,8 @@
             <label class="bc-field-label">Parentesco</label>
             <div class="bc-input-box">
               <ion-icon name="people-outline"></ion-icon>
-              <input
-                type="text"
-                placeholder="Ej. Madre, hermano, pareja..."
-                [(ngModel)]="newContactRelationship"
-                name="newContactRelationship"
-              />
+              <input type="text" placeholder="Ej. Madre, hermano, pareja..." [(ngModel)]="newContactRelationship"
+                name="newContactRelationship" />
             </div>
           </div>
 
@@ -488,12 +443,7 @@
             <label class="bc-field-label">Teléfono</label>
             <div class="bc-input-box">
               <ion-icon name="call-outline"></ion-icon>
-              <input
-                type="tel"
-                placeholder="Ej. 555 555 5555"
-                [(ngModel)]="newContactPhone"
-                name="newContactPhone"
-              />
+              <input type="tel" placeholder="Ej. 555 555 5555" [(ngModel)]="newContactPhone" name="newContactPhone" />
             </div>
           </div>
 

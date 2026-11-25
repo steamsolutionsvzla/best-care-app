@@ -18,6 +18,7 @@ import {
   IonSpinner,
   IonText,
   IonToggle,
+  ModalController,
   ToastController,
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
@@ -33,7 +34,6 @@ import {
   barbellOutline,
   swapVerticalOutline,
   mailOutline,
-  lockClosedOutline,
   heartOutline,
 } from 'ionicons/icons';
 import { AuthService } from '../../core/services/auth.service';
@@ -41,9 +41,9 @@ import { PatientDataService } from '../../core/services/patient-data.service';
 import { DocumentType, Gender } from '../../core/models/patient-profile.model';
 import { BloodType } from '../../core/models/medical-record.model';
 import { resizeImageToJpegDataUrl } from '../../core/utils/image.util';
+import { DatePickerComponent } from '../../core/components/date-picker/date-picker.component';
+import { isValidVePhone } from '../../core/utils/phone.util';
 
-/** Mínimo de caracteres para la contraseña nueva (ajustar a la regla real de Bigback). */
-const MIN_PASSWORD_LENGTH = 8;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 @Component({
@@ -66,6 +66,7 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     IonSpinner,
     IonText,
     IonToggle,
+    DatePickerComponent,
   ],
   templateUrl: './editar-perfil.page.html',
   styleUrls: ['./editar-perfil.page.scss'],
@@ -85,9 +86,6 @@ export class EditarPerfilPage {
   email = '';
   /** Correo con el que se abrió la pantalla; sirve para saber si cambió. */
   private originalEmail = '';
-  /** Contraseña nueva (opcional). Vacía = no se cambia. */
-  newPassword = '';
-  confirmPassword = '';
 
   // Datos médicos (MedicalRecord)
   bloodType: BloodType = 'O+';
@@ -109,6 +107,7 @@ export class EditarPerfilPage {
     private authService: AuthService,
     private patientData: PatientDataService,
     private router: Router,
+    private modalController: ModalController,
     private toastController: ToastController,
   ) {
     addIcons({
@@ -123,7 +122,6 @@ export class EditarPerfilPage {
       barbellOutline,
       swapVerticalOutline,
       mailOutline,
-      lockClosedOutline,
       heartOutline,
     });
 
@@ -183,6 +181,11 @@ export class EditarPerfilPage {
       return;
     }
 
+    if (this.phone && !isValidVePhone(this.phone)) {
+      this.errorMessage.set('Ingresa un teléfono venezolano válido (ej. 04121234567).');
+      return;
+    }
+
     const weightKg = this.parseOptionalDecimal(this.weight);
     if (weightKg !== undefined && (!Number.isFinite(weightKg) || weightKg < 2 || weightKg > 500)) {
       this.errorMessage.set('Ingresa un peso válido en kilogramos (ej. 70).');
@@ -200,19 +203,6 @@ export class EditarPerfilPage {
     if (emailChanged && !EMAIL_REGEX.test(newEmail)) {
       this.errorMessage.set('Ingresa un correo válido.');
       return;
-    }
-
-    // Contraseña: solo si el usuario escribió una nueva.
-    const passwordChanged = this.newPassword !== '';
-    if (passwordChanged) {
-      if (this.newPassword.length < MIN_PASSWORD_LENGTH) {
-        this.errorMessage.set(`La contraseña nueva debe tener al menos ${MIN_PASSWORD_LENGTH} caracteres.`);
-        return;
-      }
-      if (this.newPassword !== this.confirmPassword) {
-        this.errorMessage.set('Las contraseñas no coinciden.');
-        return;
-      }
     }
 
     const token = this.authService.authToken();
@@ -238,7 +228,6 @@ export class EditarPerfilPage {
           ? { document_type: this.documentType, document_id: this.documentId.trim() }
           : {}),
         ...(emailChanged ? { correo: newEmail } : {}),
-        ...(passwordChanged ? { password: this.newPassword } : {}),
         blood_type: this.bloodType,
         is_organ_donor: this.isOrganDonor,
         weight_kg: weightKg,
@@ -252,9 +241,6 @@ export class EditarPerfilPage {
         this.authService.currentUser.update((u) => (u ? { ...u, email: newEmail } : u));
         this.originalEmail = newEmail;
       }
-      // La contraseña no se conserva en memoria después de guardar.
-      this.newPassword = '';
-      this.confirmPassword = '';
 
       const toast = await this.toastController.create({
         message: 'Tus datos se actualizaron correctamente.',
@@ -264,7 +250,7 @@ export class EditarPerfilPage {
       });
       await toast.present();
 
-      this.router.navigateByUrl('/tabs/perfil');
+      await this.goBack();
     } catch (err) {
       console.error('[BestCare][editar-perfil] update falló', err);
       this.errorMessage.set(
@@ -277,7 +263,12 @@ export class EditarPerfilPage {
     }
   }
 
-  goBack() {
+  async goBack() {
+    const topModal = await this.modalController.getTop();
+    if (topModal) {
+      await topModal.dismiss();
+      return;
+    }
     this.router.navigateByUrl('/tabs/perfil');
   }
 }

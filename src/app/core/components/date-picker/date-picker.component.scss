@@ -1,0 +1,65 @@
+// src/app/core/components/date-picker/date-picker.component.scss
+
+:host {
+  display: block;
+}
+
+ion-item.bc-input {
+  --background: var(--bc-surface-2);
+  --border-radius: var(--bc-radius-md);
+  --padding-start: 14px;
+  border-radius: var(--bc-radius-md);
+  margin-bottom: 10px;
+
+  ion-icon {
+    color: var(--ion-color-medium);
+    margin-right: 8px;
+  }
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ion-color-medium);
+  margin: 0 0 2px 0;
+}
+
+.selected-value {
+  font-size: 14.5px;
+  color: var(--ion-text-color);
+}
+
+.placeholder-select {
+  color: var(--ion-color-medium);
+  font-size: 14.5px;
+}
+
+ion-modal.date-picker-modal {
+  --width: 350px;
+  --max-width: 90vw;
+  --height: 440px;
+  --max-height: 90vh;
+  --border-radius: 16px;
+  --background: var(--ion-background-color, #ffffff);
+  --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --backdrop-opacity: 0.5 !important;
+
+  &::part(backdrop) {
+    opacity: 0.5 !important;
+    background-color: #000000 !important;
+    display: block !important;
+  }
+
+  &::part(content) {
+    border-radius: 16px;
+    background: var(--ion-background-color, #ffffff);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+  }
+
+  ion-datetime {
+    background: var(--ion-background-color, #ffffff);
+    border-radius: 16px;
+    height: 100%;
+  }
+}

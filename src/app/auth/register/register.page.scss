@@ -114,23 +114,6 @@
   }
 }
 
-.doc-row {
-  display: flex;
-  gap: 10px;
-
-  &__type {
-    flex: 0 0 92px;
-
-    ion-select {
-      max-width: 100%;
-    }
-  }
-
-  &__id {
-    flex: 1;
-  }
-}
-
 .shadow-btn {
   --box-shadow: var(--bc-shadow-btn);
   margin-top: 8px;

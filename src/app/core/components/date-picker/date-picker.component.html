@@ -1,0 +1,41 @@
+<ion-item
+  [id]="id"
+  class="bc-input"
+  lines="none"
+  [button]="!disabled"
+  [disabled]="disabled"
+>
+  <ion-icon *ngIf="icon" slot="start" [name]="icon"></ion-icon>
+  <ion-label>
+    <p class="label" *ngIf="label">{{ label }}</p>
+    <div class="placeholder-select" *ngIf="!currentValue">{{ placeholder }}</div>
+    <div class="selected-value" *ngIf="currentValue">{{ displayValue }}</div>
+  </ion-label>
+</ion-item>
+
+<ion-modal
+  #modal
+  class="date-picker-modal"
+  [mode]="modalMode"
+  [trigger]="id"
+  [keepContentsMounted]="true"
+  [showBackdrop]="true"
+  [backdropDismiss]="true"
+>
+  <ng-template>
+    <ion-datetime
+      [presentation]="presentation"
+      [locale]="locale"
+      [isDateEnabled]="isDateEnabled"
+      [min]="min"
+      [max]="max"
+      [value]="datetimeValue"
+      [showDefaultButtons]="showDefaultButtons"
+      [doneText]="doneText"
+      [cancelText]="cancelText"
+      (ionChange)="onDateChange($event, modal)"
+      (ionCancel)="modal.dismiss()"
+    >
+    </ion-datetime>
+  </ng-template>
+</ion-modal>

@@ -1,0 +1,66 @@
+// src/app/perfil/cambiar-contrasena/cambiar-contrasena.page.scss
+
+.cambiar-contrasena-content {
+  --background: var(--ion-background-color);
+  --padding-start: 20px;
+  --padding-end: 20px;
+  --padding-bottom: 32px;
+}
+
+.cambiar-contrasena-eyebrow {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ion-color-primary);
+  margin: 18px 4px 8px;
+}
+
+.cambiar-contrasena-card {
+  background: var(--bc-surface-1);
+  border-radius: var(--bc-radius-lg);
+  box-shadow: var(--bc-shadow-card);
+  padding: 14px 14px 4px;
+  display: flex;
+  flex-direction: column;
+}
+
+.bc-input {
+  --background: var(--bc-surface-2);
+  --border-radius: var(--bc-radius-md);
+  --padding-start: 14px;
+  border-radius: var(--bc-radius-md);
+  margin-bottom: 10px;
+
+  ion-icon {
+    color: var(--ion-color-medium);
+    margin-right: 8px;
+  }
+
+  &__toggle {
+    background: none;
+    border: none;
+    padding: 4px;
+    margin-right: 6px;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+
+    ion-icon {
+      font-size: 19px;
+      color: var(--ion-color-medium);
+      margin-right: 0;
+    }
+  }
+}
+
+.shadow-btn {
+  --box-shadow: var(--bc-shadow-btn);
+  margin-top: 20px;
+}
+
+.error-text {
+  font-size: 13px;
+  margin: 10px 4px 0;
+}

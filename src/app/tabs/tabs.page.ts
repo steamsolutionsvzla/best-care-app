@@ -35,7 +35,7 @@ export class TabsPage {
   readonly tabs: TabDef[] = [
     { value: 'inicio', label: 'Inicio', icon: 'home', href: '/tabs/inicio', darkBg: false },
     { value: 'centros', label: 'Centros', icon: 'location', href: '/tabs/centros', darkBg: false },
-    { value: 'perfil', label: 'Perfil', icon: 'person', href: '/tabs/perfil', darkBg: true },
+    { value: 'perfil', label: 'Perfil', icon: 'person', href: '/tabs/perfil', darkBg: false },
   ];
 
   /** Índice de la pestaña activa, derivado de la URL actual y actualizado
@@ -83,7 +83,7 @@ export class TabsPage {
       Math.min(desiredWing, cx - r - clearance, W - r - cx - clearance),
     );
     const notchR = wing / 1.35;
-    const dipDepth = notchR * 0.8; // muesca más superficial = más margen respecto a la burbuja
+    const dipDepth = notchR * 0.55; // muesca suave acorde a la burbuja más cercana al label
 
     const round = (n: number) => Math.round(n * 100) / 100;
 

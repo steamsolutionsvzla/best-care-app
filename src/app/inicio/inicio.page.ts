@@ -1,15 +1,13 @@
 // src/app/inicio/inicio.page.ts
-import { Component, computed, effect, signal } from '@angular/core';
+import { Component, ElementRef, ViewChild, computed, effect, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
-  IonHeader,
-  IonToolbar,
-  IonTitle,
   IonContent,
   IonIcon,
   IonModal,
+  ModalController,
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import {
@@ -33,10 +31,15 @@ import {
   callOutline,
   personOutline,
   peopleOutline,
+  checkmark,
+  shieldCheckmarkOutline,
 } from 'ionicons/icons';
 import { toDataURL } from 'qrcode';
 import { PatientDataService } from '../core/services/patient-data.service';
 import { AuthService } from '../core/services/auth.service';
+import { EditarPerfilPage } from '../perfil/editar-perfil/editar-perfil.page';
+import { DatePickerComponent } from '../core/components/date-picker/date-picker.component';
+import { isValidVePhone } from '../core/utils/phone.util';
 import {
   Allergy,
   AllergySeverity,
@@ -47,7 +50,7 @@ import {
 
 type DiagnosisStatus = Diagnosis['status'];
 
-type ProfileTab = 'alergias' | 'medicamentos' | 'diagnosticos' | 'contactos';
+type ProfileTab = 'datos' | 'alergias' | 'medicamentos' | 'diagnosticos' | 'contactos';
 
 interface ProfileTabDef {
   value: ProfileTab;
@@ -57,6 +60,15 @@ interface ProfileTabDef {
   colorClass: 'danger' | 'success' | 'primary' | 'info';
 }
 
+interface HomeBanner {
+  title: string;
+  subtitle: string;
+  cta: string;
+  route: string;
+  theme: 'clinical' | 'centers' | 'record';
+  icon: string;
+}
+
 @Component({
   selector: 'app-inicio',
   standalone: true,
@@ -64,23 +76,52 @@ interface ProfileTabDef {
     CommonModule,
     DatePipe,
     FormsModule,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
     IonContent,
     IonIcon,
     IonModal,
+    DatePickerComponent,
   ],
   templateUrl: './inicio.page.html',
   styleUrls: ['./inicio.page.scss'],
 })
 export class InicioPage {
-  /** Definición de las 4 "ventanas" seleccionables (Alergias/Medicamentos/Diagnósticos/Contactos de emergencia). */
+  @ViewChild('bannerSlider') bannerSlider?: ElementRef<HTMLDivElement>;
+
+  readonly banners: HomeBanner[] = [
+    {
+      title: 'Exámenes clínicos anuales',
+      subtitle: 'Tienes análisis de rutina recomendados pendientes.',
+      cta: 'Agendar cita',
+      route: '',
+      theme: 'clinical',
+      icon: 'pulse-outline',
+    },
+    {
+      title: 'Red de centros Best Care',
+      subtitle: 'Encuentra clínicas y laboratorios cercanos a ti.',
+      cta: 'Ver centros',
+      route: '',
+      theme: 'centers',
+      icon: 'medkit-outline',
+    },
+    {
+      title: 'Tu ficha médica al día',
+      subtitle: 'Mantén tus datos y contactos siempre actualizados.',
+      cta: 'Editar perfil',
+      route: '',
+      theme: 'record',
+      icon: 'shield-checkmark-outline',
+    },
+  ];
+
+  activeBanner = signal(0);
+
+  /** Tarjetas del grid "Gestionar datos". */
   readonly profileTabs: ProfileTabDef[] = [
     { value: 'alergias', label: 'Alergias', icon: 'warning-outline', colorClass: 'danger' },
     { value: 'medicamentos', label: 'Medicamentos', icon: 'medical-outline', colorClass: 'success' },
     { value: 'diagnosticos', label: 'Diagnósticos', icon: 'document-text-outline', colorClass: 'primary' },
-    { value: 'contactos', label: 'Contactos de emergencia', icon: 'call-outline', colorClass: 'info' },
+    { value: 'contactos', label: 'Emergencia', icon: 'call-outline', colorClass: 'info' },
   ];
 
   profile = this.patientData.profile;
@@ -120,6 +161,7 @@ export class InicioPage {
     private patientData: PatientDataService,
     private authService: AuthService,
     private router: Router,
+    private modalController: ModalController,
   ) {
     addIcons({
       qrCodeOutline,
@@ -142,6 +184,8 @@ export class InicioPage {
       callOutline,
       personOutline,
       peopleOutline,
+      checkmark,
+      shieldCheckmarkOutline,
     });
 
     // Genera el QR de forma automática (y lo regenera si cambia el id del
@@ -152,14 +196,21 @@ export class InicioPage {
     });
   }
 
-  /** Al tocar la tarjeta de MediCard, lleva a editar los datos del paciente. */
-  goToEditProfile() {
-    this.router.navigateByUrl('/perfil/editar');
+  /** Al tocar la tarjeta de MediCard, abre el editor de perfil en modal fullscreen. */
+  async goToEditProfile() {
+    const modal = await this.modalController.create({
+      component: EditarPerfilPage,
+      cssClass: 'bc-fullscreen-modal',
+    });
+    await modal.present();
   }
 
-  /** Al tocar una fila del historial médico, abre su modal de detalle (lista + alta). */
+  /** Al tocar una tarjeta del grid, abre el editor de perfil o el modal correspondiente. */
   openSegment(tab: ProfileTab) {
     switch (tab) {
+      case 'datos':
+        this.goToEditProfile();
+        break;
       case 'alergias':
         this.openAllergiesModal();
         break;
@@ -175,9 +226,34 @@ export class InicioPage {
     }
   }
 
-  /** Texto "X registradas/activos" que se muestra bajo cada ventana seleccionable. */
+  onBannerScroll(event: Event) {
+    const el = event.target as HTMLElement;
+    const step = el.clientWidth * 0.86;
+    if (step > 0) {
+      const idx = Math.round(el.scrollLeft / step);
+      this.activeBanner.set(Math.max(0, Math.min(idx, this.banners.length - 1)));
+    }
+  }
+
+  scrollToBanner(index: number) {
+    const el = this.bannerSlider?.nativeElement;
+    if (!el) return;
+    const step = el.clientWidth * 0.86;
+    el.scrollTo({ left: index * step, behavior: 'smooth' });
+    this.activeBanner.set(index);
+  }
+
+  openBanner(banner: HomeBanner) {
+    this.router.navigateByUrl(banner.route);
+  }
+
+  /** Texto "X registradas/activos" que se muestra bajo cada tarjeta. */
   countLabel(tab: ProfileTab): string {
     switch (tab) {
+      case 'datos': {
+        const p = this.profile();
+        return p.firstName && p.lastName ? 'Completos' : 'Por completar';
+      }
       case 'alergias': {
         const n = this.record().allergies.length;
         return `${n} registrada${n === 1 ? '' : 's'}`;
@@ -542,6 +618,10 @@ export class InicioPage {
     }
     if (!phone) {
       this.addContactError.set('Escribe un teléfono de contacto.');
+      return;
+    }
+    if (!isValidVePhone(phone)) {
+      this.addContactError.set('Ingresa un teléfono venezolano válido (ej. 04121234567).');
       return;
     }
 

@@ -7,8 +7,6 @@ import {
   IonContent,
   IonItem,
   IonInput,
-  IonSelect,
-  IonSelectOption,
   IonButton,
   IonText,
   IonIcon,
@@ -19,14 +17,10 @@ import {
   personAddOutline,
   mailOutline,
   lockClosedOutline,
-  personOutline,
-  callOutline,
   eyeOutline,
   eyeOffOutline,
-  idCardOutline,
 } from 'ionicons/icons';
 import { AuthService } from '../../core/services/auth.service';
-import { DocumentType } from '../../core/models/patient-profile.model';
 
 @Component({
   selector: 'app-register',
@@ -38,8 +32,6 @@ import { DocumentType } from '../../core/models/patient-profile.model';
     IonContent,
     IonItem,
     IonInput,
-    IonSelect,
-    IonSelectOption,
     IonButton,
     IonText,
     IonIcon,
@@ -49,11 +41,6 @@ import { DocumentType } from '../../core/models/patient-profile.model';
   styleUrls: ['./register.page.scss'],
 })
 export class RegisterPage {
-  firstName = '';
-  lastName = '';
-  documentType: DocumentType = 'V';
-  documentId = '';
-  phone = '';
   email = '';
   password = '';
   confirmPassword = '';
@@ -62,28 +49,13 @@ export class RegisterPage {
   showPassword = false;
   showConfirmPassword = false;
 
-  /**
-   * Bug: el "Tipo" de documento vive en un <ion-item> angosto a propósito
-   * (doc-row__type, 92px, junto a "Cédula"). El popover de ion-select por
-   * defecto usa `size: 'cover'`, es decir, toma el mismo ancho que el
-   * elemento que lo dispara — por eso salía un recuadro en blanco: el
-   * popover se abría con ~92px de ancho, insuficiente para el radio-list
-   * con "V (Venezolano)" etc., y su contenido quedaba recortado/invisible.
-   * `size: 'auto'` hace que el popover mida según su propio contenido en
-   * vez del elemento que lo abrió.
-   */
-  documentTypePopoverOptions = { size: 'auto' as const };
-
   constructor(private authService: AuthService) {
     addIcons({
       personAddOutline,
       mailOutline,
       lockClosedOutline,
-      personOutline,
-      callOutline,
       eyeOutline,
       eyeOffOutline,
-      idCardOutline,
     });
   }
 
@@ -98,12 +70,8 @@ export class RegisterPage {
   async onRegister() {
     this.errorMessage.set('');
 
-    if (!this.firstName || !this.lastName || !this.phone || !this.email) {
+    if (!this.email.trim() || !this.password || !this.confirmPassword) {
       this.errorMessage.set('Completa todos los campos para continuar.');
-      return;
-    }
-    if (!this.documentId.trim()) {
-      this.errorMessage.set('Ingresa tu número de cédula.');
       return;
     }
     if (this.password !== this.confirmPassword) {
@@ -117,14 +85,13 @@ export class RegisterPage {
 
     this.submitting.set(true);
     try {
+      // shortcut: AuthService.register still requires firstName/lastName/phone, update when backend drops them
       const result = await this.authService.register(
-        this.firstName,
-        this.lastName,
-        this.email,
-        this.phone,
+        '',
+        '',
+        this.email.trim(),
+        '',
         this.password,
-        this.documentType,
-        this.documentId.trim(),
       );
       if (!result.ok) {
         this.errorMessage.set(result.error ?? 'No se pudo crear la cuenta. Intenta nuevamente.');

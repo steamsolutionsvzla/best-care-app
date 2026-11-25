@@ -1,11 +1,12 @@
 // src/app/perfil/perfil.page.ts
 import { Component, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Browser } from '@capacitor/browser';
 import {
   IonContent,
   IonIcon,
   AlertController,
+  ModalController,
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import {
@@ -19,6 +20,8 @@ import {
 } from 'ionicons/icons';
 import { AuthService } from '../core/services/auth.service';
 import { PatientDataService } from '../core/services/patient-data.service';
+import { EditarPerfilPage } from './editar-perfil/editar-perfil.page';
+import { CambiarContrasenaPage } from './cambiar-contrasena/cambiar-contrasena.page';
 
 @Component({
   selector: 'app-perfil',
@@ -35,7 +38,7 @@ export class PerfilPage {
   constructor(
     private authService: AuthService,
     private patientData: PatientDataService,
-    private router: Router,
+    private modalController: ModalController,
     private alertController: AlertController,
   ) {
     addIcons({
@@ -49,16 +52,24 @@ export class PerfilPage {
     });
   }
 
-  goToEditProfile() {
-    this.router.navigateByUrl('/perfil/editar');
+  async goToEditProfile() {
+    const modal = await this.modalController.create({
+      component: EditarPerfilPage,
+      cssClass: 'bc-fullscreen-modal',
+    });
+    await modal.present();
   }
 
-  goToChangePassword() {
-    // TODO: navegar al flujo real de cambio de contraseña.
+  async goToChangePassword() {
+    const modal = await this.modalController.create({
+      component: CambiarContrasenaPage,
+      cssClass: 'bc-fullscreen-modal',
+    });
+    await modal.present();
   }
 
-  goToTerms() {
-    // TODO: navegar a la pantalla de Términos & Condiciones.
+  async goToTerms() {
+    await Browser.open({ url: 'https://bestclinic.io/bestclinic_terms/' });
   }
 
   async logout() {

@@ -1,12 +1,13 @@
 // src/app/perfil/perfil.page.scss
 
 .perfil-content {
-  --background: var(--bc-gradient-primary);
+  --background: var(--ion-background-color);
 }
 
 /* ===== Encabezado: avatar, nombre y rol ===== */
 .perfil-header {
-  padding: 36px 24px 96px;
+  background: var(--bc-gradient-primary);
+  padding: calc(env(safe-area-inset-top, 0px) + 36px) 24px 96px;
   text-align: center;
 
   .avatar-ring {
@@ -57,9 +58,7 @@
   background: var(--ion-background-color);
   border-radius: var(--bc-radius-lg) var(--bc-radius-lg) 0 0;
   margin-top: -72px;
-  padding: 24px 20px 32px;
-  min-height: 40vh;
-  box-shadow: var(--bc-shadow-card);
+  padding: 24px 20px 110px;
 }
 
 .perfil-eyebrow {
@@ -71,7 +70,7 @@
   color: var(--ion-color-primary);
   margin: 0 4px 8px;
 
-  .perfil-group + & {
+  .perfil-group+& {
     margin-top: 20px;
   }
 }
@@ -110,22 +109,34 @@
 
     &--primary {
       background: rgba(45, 143, 255, 0.12);
-      ion-icon { color: var(--ion-color-primary); }
+
+      ion-icon {
+        color: var(--ion-color-primary);
+      }
     }
 
     &--success {
       background: rgba(45, 211, 111, 0.12);
-      ion-icon { color: var(--ion-color-success); }
+
+      ion-icon {
+        color: var(--ion-color-success);
+      }
     }
 
     &--warning {
       background: rgba(255, 176, 32, 0.14);
-      ion-icon { color: var(--ion-color-warning); }
+
+      ion-icon {
+        color: var(--ion-color-warning);
+      }
     }
 
     &--danger {
       background: var(--bc-danger-bg);
-      ion-icon { color: var(--ion-color-danger); }
+
+      ion-icon {
+        color: var(--ion-color-danger);
+      }
     }
   }
 

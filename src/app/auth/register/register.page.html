@@ -20,43 +20,6 @@
       <h2>Tus datos de acceso</h2>
 
       <ion-item class="bc-input" lines="none">
-        <ion-icon name="person-outline" slot="start"></ion-icon>
-        <ion-input label="Nombres" labelPlacement="floating" type="text" [(ngModel)]="firstName">
-        </ion-input>
-      </ion-item>
-
-      <ion-item class="bc-input" lines="none">
-        <ion-icon name="person-outline" slot="start"></ion-icon>
-        <ion-input label="Apellidos" labelPlacement="floating" type="text" [(ngModel)]="lastName">
-        </ion-input>
-      </ion-item>
-
-      <div class="doc-row">
-        <ion-item class="bc-input doc-row__type" lines="none">
-          <ion-icon name="id-card-outline" slot="start"></ion-icon>
-          <ion-select label="Tipo" labelPlacement="floating" interface="popover"
-            [interfaceOptions]="documentTypePopoverOptions" [(ngModel)]="documentType">
-            <ion-select-option value="V">V (Venezolano)</ion-select-option>
-            <ion-select-option value="E">E (Extranjero)</ion-select-option>
-            <ion-select-option value="P">P (Pasaporte)</ion-select-option>
-          </ion-select>
-        </ion-item>
-
-        <ion-item class="bc-input doc-row__id" lines="none">
-          <ion-input label="Cédula" labelPlacement="floating" type="text" inputmode="numeric" placeholder="12345678"
-            [(ngModel)]="documentId">
-          </ion-input>
-        </ion-item>
-      </div>
-
-      <ion-item class="bc-input" lines="none">
-        <ion-icon name="call-outline" slot="start"></ion-icon>
-        <ion-input label="Teléfono" labelPlacement="floating" type="tel" placeholder="+52 55 1234 5678"
-          [(ngModel)]="phone">
-        </ion-input>
-      </ion-item>
-
-      <ion-item class="bc-input" lines="none">
         <ion-icon name="mail-outline" slot="start"></ion-icon>
         <ion-input label="Correo Electrónico" labelPlacement="floating" type="email" [(ngModel)]="email">
         </ion-input>
